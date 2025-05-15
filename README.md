@@ -1,79 +1,90 @@
-# Weather Forecast Microservice (Microservice A)
+# 🌤️ Weather Forecast Microservice (Microservice A)
 
-This microservice provides a 5-day weather forecast (including temperature, wind speed, and precipitation) for a sailboat race application. It uses the OpenWeatherMap API to retrieve weather information for a given location.
+This microservice provides a 5-day weather forecast (including temperature, wind speed, and precipitation) for a sailboat race application. It uses the OpenWeatherMap API to retrieve weather data for a specified location.
 
----
+## 🔧 Setup Instructions
 
-## How to Request Data
+1. Clone the repo and navigate into the project folder.
+2. Install required Python packages:
 
-Send a **GET** request to this endpoint:
+   pip install -r requirements.txt
 
-```
-http://localhost:5000/forecast?location=Newport,OR&date=2025-05-17
-```
+3. Add your OpenWeatherMap API key to a `.env` file in the root directory:
+
+   OPENWEATHERMAP_API_KEY=your_api_key_here
+
+4. Run the Flask app:
+
+   python app.py
+
+   The server will start at: http://127.0.0.1:5000/
+
+## 📡 API Endpoint
+
+### GET `/forecast`
+
+**Example:**
+
+http://127.0.0.1:5000/forecast?location=Newport,OR&date=2025-05-17
 
 ### Parameters:
-- `location` (string, required): e.g., `"Newport,OR"`
-- `date` (string, optional): `"YYYY-MM-DD"` — if omitted, you'll get the full 5-day forecast.
+- `location` (required): City and state abbreviation (e.g., Newport,OR)
+- `date` (optional): Format YYYY-MM-DD. If omitted, returns the full 5-day forecast.
 
----
+## ✅ Sample JSON Response
 
-## What the Microservice Returns
-
-A JSON array with 5 forecast entries like this:
-
-```json
 [
   {
+    "date": "2025-05-15",
+    "precipitation": 0,
+    "temperature_high": 54,
+    "temperature_low": 47,
+    "wind_speed_avg": 8
+  },
+  {
+    "date": "2025-05-16",
+    "precipitation": 0,
+    "temperature_high": 54,
+    "temperature_low": 50,
+    "wind_speed_avg": 6
+  },
+  {
     "date": "2025-05-17",
-    "temperature_high": 68,
-    "temperature_low": 54,
-    "wind_speed_avg": 14,
-    "precipitation": 10
+    "precipitation": 89,
+    "temperature_high": 52,
+    "temperature_low": 50,
+    "wind_speed_avg": 13
   },
   {
     "date": "2025-05-18",
-    "temperature_high": 70,
-    "temperature_low": 56,
-    "wind_speed_avg": 13,
-    "precipitation": 5
+    "precipitation": 86,
+    "temperature_high": 54,
+    "temperature_low": 44,
+    "wind_speed_avg": 13
   },
   {
     "date": "2025-05-19",
-    "temperature_high": 67,
-    "temperature_low": 52,
-    "wind_speed_avg": 15,
-    "precipitation": 25
-  },
-  {
-    "date": "2025-05-20",
-    "temperature_high": 66,
-    "temperature_low": 50,
-    "wind_speed_avg": 18,
-    "precipitation": 15
-  },
-  {
-    "date": "2025-05-21",
-    "temperature_high": 64,
-    "temperature_low": 49,
-    "wind_speed_avg": 12,
-    "precipitation": 0
+    "precipitation": 85,
+    "temperature_high": 58,
+    "temperature_low": 40,
+    "wind_speed_avg": 8
   }
 ]
-```
 
----
-
-## Example Usage in Python
+## 💻 Example Python Usage
 
 ```python
 import requests
 
-url = "http://localhost:5000/forecast?location=Newport,OR&date=2025-05-17"
+url = "http://127.0.0.1:5000/forecast?location=Newport,OR"
 response = requests.get(url)
-print(response.json())
-```
 
+if response.status_code == 200:
+    forecast = response.json()
+    for day in forecast:
+        print(f"Date: {day['date']}, High: {day['temperature_high']}°F, Low: {day['temperature_low']}°F, Precipitation: {day['precipitation']}%, Wind Speed: {day['wind_speed_avg']} mph")
+else:
+    print("Failed to get forecast.")
 ---
 
 ## 📊 UML Sequence Diagram
